@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サーバー一覧 - HIKONEZUMI LOCAL AI TOOLS</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; margin:0; padding:0; background:#f2f2f7; }
+.tabs { display:flex; background:white; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+.tab { flex:1; padding:12px; text-align:center; cursor:pointer; border-bottom:3px solid transparent; transition:0.2s; }
+.tab.active { border-bottom:3px solid #007aff; font-weight:600; }
+.tab-content { padding:16px; }
+.tab-content h3 { margin-top:0; }
+.tab-content ul { padding-left:20px; }
+</style>
+</head>
+<body>
+
+<div class="tabs" id="tabsContainer"></div>
+<div class="tab-content" id="tabContent"></div>
+
+<script>
+const servers = [
+  {
+    name: "HPE PROLIANT DL380 GEN10",
+    ip: "192.168.0.101",
+    dashboard: "index2.html",
+    specs: ["CPU: Intel Xeon Gold 6138x2","GPU: NVIDIA QUADRO RTX8000 48GBx1","RAM: 256GB","ストレージ: 512GB","OS: Ubuntu 22.04 LTS"]
+  },
+  {
+    name: "FUJITSU PRIMERGY RX2540 M5",
+    ip: "192.168.0.102",
+    dashboard: "index3.html",
+    specs: ["CPU: Intel Xeon Silver 4214x2","GPU: NVIDIA RTX6000 24GB","RAM: 128GB","ストレージ: 1TB","OS: Ubuntu 20.04 LTS"]
+  },
+  
+];
+
+const tabsContainer = document.getElementById("tabsContainer");
+const tabContent = document.getElementById("tabContent");
+
+// タブ生成
+servers.forEach((server, index)=>{
+  const tab = document.createElement("div");
+  tab.className = "tab";
+  tab.textContent = server.ip;
+  tab.onclick = ()=>showServer(index);
+  tabsContainer.appendChild(tab);
+});
+
+// サーバー情報表示
+function showServer(index){
+  // タブのアクティブ切替
+  document.querySelectorAll(".tab").forEach((t,i)=>t.classList.toggle("active", i===index));
+
+  const s = servers[index];
+  tabContent.innerHTML = `
+    <h3>${s.name}</h3>
+    <p>IP: ${s.ip}</p>
+    <ul>
+      ${s.specs.map(spec=>`<li>${spec}</li>`).join('')}
+    </ul>
+    <a href="${s.dashboard}" target="_blank">ダッシュボードにアクセス</a>
+  `;
+}
+
+// 初期表示
+showServer(0);
+</script>
+
+</body>
+</html>
